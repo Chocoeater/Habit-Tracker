@@ -45,7 +45,9 @@ class Habit(models.Model):
     reward = models.CharField(
         max_length=300,
         verbose_name='вознаграждение',
-        help_text='Введите вознаграждение'
+        help_text='Введите вознаграждение',
+        null=True,
+        blank=True
     )
     duration = models.PositiveIntegerField(
         verbose_name='время на выполнение (в секундах)',
