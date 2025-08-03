@@ -56,3 +56,10 @@ class Habit(models.Model):
         verbose_name='признак публичности',
         help_text='Могут ли другие пользователи видеть привычку?'
     )
+
+    class Meta:
+        verbose_name = 'Привычка'
+        verbose_name_plural = 'Привычки'
+
+    def __str__(self):
+        return f'Привычка №{self.pk} -- {self.action}'
