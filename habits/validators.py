@@ -29,3 +29,14 @@ def validate_pleasant_and_useful_habit(attrs):
             if not linked_habit.tag_pleasant_habit:
                 raise ValidationError('Полезная привычка не может являться привычкой-вознаграждением')
 
+def validate_duration(attrs):
+    duration = attrs.get('duration')
+
+    if duration > 120:
+        raise ValidationError('Длительность привычки не должна превышать 120 с.')
+
+def validate_frequency(attrs):
+    frequency = attrs.get('frequency')
+
+    if frequency > 7:
+        raise  ValidationError('Привычка должна выполняться хотя бы раз в неделю.')

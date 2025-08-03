@@ -12,4 +12,6 @@ class MyHabitSerializer(ModelSerializer):
     def validate(self, attrs):
         validators.validate_mutually_exclusive_fields(attrs)
         validators.validate_pleasant_and_useful_habit(attrs)
+        validators.validate_duration(attrs)
+        validators.validate_frequency(attrs)
         return attrs
