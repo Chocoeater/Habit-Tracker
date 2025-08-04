@@ -10,7 +10,7 @@ def validate_mutually_exclusive_fields(attrs):
     if linked_habit and reward:
         raise ValidationError('Укажите либо вознаграждение, либо вознаграждающую привычку.')
     if not linked_habit and not reward:
-        raise ValidationError('Должно быть указано либо вознаграждение, либо вознаграждающая привычка.')
+        raise ValidationError('Должно быть указано либо вознаграждение (поле reward), либо вознаграждающая привычка (linked_habit).')
 
 
 def validate_pleasant_and_useful_habit(attrs):
@@ -38,5 +38,8 @@ def validate_duration(attrs):
 def validate_frequency(attrs):
     frequency = attrs.get('frequency')
 
-    if frequency > 7:
-        raise  ValidationError('Привычка должна выполняться хотя бы раз в неделю.')
+    if frequency:
+        if frequency > 7:
+            raise  ValidationError('Привычка должна выполняться хотя бы раз в неделю.')
+    else:
+        raise ValidationError('Задайте периодичность (поле frequency)')

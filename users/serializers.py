@@ -25,7 +25,7 @@ class UserListSerializer(ModelSerializer):
 class UserRetrieveSerializer(ModelSerializer):
     """Сериализатор для владельца и для админа"""
 
-    habits = MyHabitSerializer(many=True, read_only=True, source='habits')
+    habits = MyHabitSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
