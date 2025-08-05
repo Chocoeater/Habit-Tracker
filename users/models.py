@@ -12,8 +12,8 @@ class User(AbstractUser):
     )
     telegram_id = models.CharField(
         max_length=150,
-        verbose_name='ID в телеграме',
-        help_text='Введите Ваш ID в телеграме',
+        verbose_name='ID чата',
+        help_text='Введите Ваш ID чата',
         blank=True,
         null=True
     )

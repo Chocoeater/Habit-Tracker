@@ -19,7 +19,7 @@ class UserListSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'is_active']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'telegram_id', 'is_active']
 
 
 class UserRetrieveSerializer(ModelSerializer):
@@ -29,7 +29,7 @@ class UserRetrieveSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'habits']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'telegram_id', 'habits']
 
 class PublicUserRetrieveSerializer(ModelSerializer):
     """Сериализатор для прочих пользователей"""
@@ -51,7 +51,7 @@ class UserCreateSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "password"]
+        fields = ["id", "email", "password", 'telegram_id']
         extra_kwargs = {"password": {"write_only": True}}
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

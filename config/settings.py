@@ -13,6 +13,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "django_celery_beat",
 
     # my app
     "habits",
@@ -147,4 +152,32 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+# Настройки для Celery
+
+# URL-адрес брокера сообщений
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = TIME_ZONE
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Периодическая таска настройка
+CELERY_BEAT_SCHEDULE = {
+    'send_notification': {
+        'task': 'habits.tasks.send_daily_habits',
+        # 'schedule': crontab(hour=8, minute=0),
+        'schedule': timedelta(seconds=120),
+    },
 }
