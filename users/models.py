@@ -10,6 +10,13 @@ class User(AbstractUser):
         verbose_name='имя пользователя',
         help_text='Введите имя пользователя'
     )
+    telegram_id = models.CharField(
+        max_length=150,
+        verbose_name='ID в телеграме',
+        help_text='Введите Ваш ID в телеграме',
+        blank=True,
+        null=True
+    )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
 
