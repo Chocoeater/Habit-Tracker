@@ -1,8 +1,6 @@
-from time import sleep
 
 from django.conf import settings
 import requests
-import logging
 
 # from telegram import Bot
 # import asyncio

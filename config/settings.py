@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_celery_beat",
+    "corsheaders",
+    "drf_yasg",
 
     # my app
     "habits",
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -181,3 +184,14 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(seconds=120),
     },
 }
+
+# Настройки CORS (для деплоя?)
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com", # Замените на адрес вашего фронтенд-сервера и добавьте адрес бэкенд-сервера
+]
+
+CORS_ALLOW_ALL_ORIGINS = False

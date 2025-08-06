@@ -18,6 +18,8 @@ django-celery-beat = "^2.8.1"
 eventlet = "^0.40.2"
 redis = "^6.3.0"
 requests = "^2.32.4"
+django-cors-headers = "^4.7.0"
+drf-yasg = "^1.21.10"
 
 
 [tool.poetry.group.lint.dependencies]

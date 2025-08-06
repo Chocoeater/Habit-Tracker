@@ -16,8 +16,12 @@ from users.permissions import IsOwnerOrAdmin
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [IsOwnerOrAdmin, IsAuthenticated]
+    lookup_field = 'pk'
 
     def get_serializer_class(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return serializers.UserRetrieveSerializer
+
         if self.action == 'list':
             if self.request.user.is_staff:
                 return serializers.UserListSerializer
