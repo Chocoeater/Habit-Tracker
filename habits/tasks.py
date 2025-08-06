@@ -1,7 +1,4 @@
 from celery import shared_task
-from users.telegram_bot import send_telegram_notification
-
-from celery import shared_task
 from django.contrib.auth import get_user_model
 from users.telegram_bot import send_telegram_notification
 
@@ -32,7 +29,4 @@ def send_daily_habits():
             )
 
         # Отправляем в Telegram
-        send_telegram_notification(
-            telegram_id=user.telegram_id,
-            message=message
-        )
+        send_telegram_notification(telegram_id=user.telegram_id, message=message)

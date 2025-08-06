@@ -7,8 +7,17 @@ from habits import validators
 class MyHabitSerializer(ModelSerializer):
     class Meta:
         model = Habit
-        fields = ['place', 'time_to_do', 'action', 'frequency', 'tag_pleasant_habit', 'linked_habit', 'reward',
-                  'duration', 'tag_public']
+        fields = [
+            "place",
+            "time_to_do",
+            "action",
+            "frequency",
+            "tag_pleasant_habit",
+            "linked_habit",
+            "reward",
+            "duration",
+            "tag_public",
+        ]
 
     def validate(self, attrs):
         validators.validate_mutually_exclusive_fields(attrs, self.instance)
@@ -26,6 +35,5 @@ class PublicHabitSerializer(ModelSerializer):
 
     class Meta:
         model = Habit
-        fields = ['owner', 'place', 'time_to_do', 'action', 'frequency', 'tag_pleasant_habit', 'duration']
+        fields = ["owner", "place", "time_to_do", "action", "frequency", "tag_pleasant_habit", "duration"]
         read_only_fields = fields
-

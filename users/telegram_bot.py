@@ -1,4 +1,3 @@
-
 from django.conf import settings
 import requests
 
@@ -22,11 +21,11 @@ TELEGRAM_BOT_TOKEN = settings.TELEGRAM_BOT_TOKEN
 #     """Синхронная обертка для асинхронной отправки"""
 #     return asyncio.run(_async_send_message(telegram_id, message))
 
+
 def send_telegram_notification(telegram_id: str, message: str):
-    url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     params = {
-        'chat_id': telegram_id,
-        'text': message,
+        "chat_id": telegram_id,
+        "text": message,
     }
     requests.post(url, json=params)
-
