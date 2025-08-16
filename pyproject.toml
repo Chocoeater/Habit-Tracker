@@ -12,6 +12,14 @@ djangorestframework = "^3.16.0"
 psycopg2 = "^2.9.10"
 dotenv = "^0.9.9"
 djangorestframework-simplejwt = "^5.5.1"
+python-telegram-bot = "^22.3"
+celery = "^5.5.3"
+django-celery-beat = "^2.8.1"
+eventlet = "^0.40.2"
+redis = "^6.3.0"
+requests = "^2.32.4"
+django-cors-headers = "^4.7.0"
+drf-yasg = "^1.21.10"
 
 
 [tool.poetry.group.lint.dependencies]
@@ -21,6 +29,10 @@ flake8 = "^7.3.0"
 
 [tool.poetry.group.extras.dependencies]
 ipython = "^9.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.10.2"
 
 [build-system]
 requires = ["poetry-core"]
