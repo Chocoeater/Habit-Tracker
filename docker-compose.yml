@@ -16,8 +16,9 @@ services:
       db:
         condition: service_healthy
 
+
   db:
-    image: postgres
+    image: postgres:15
     env_file:
       - .env
     environment:
@@ -34,6 +35,54 @@ services:
       timeout: 10s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  celery_worker:
+    build: .
+    command: celery -A config worker -l info
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CELERY_BROKER_TRANSPORT: "redis"
+    restart: unless-stopped
+
+  celery_beat:
+    build: .
+    command: celery -A config beat -l info
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_BEAT_SCHEDULER: django_celery_beat.schedulers:DatabaseScheduler
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   static_volume:
+  redis_data:

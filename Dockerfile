@@ -20,8 +20,8 @@ RUN poetry install --no-interaction --no-root
 # Копируем весь проект
 COPY . .
 
-ENV CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
-ENV CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+ENV CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+ENV CELERY_BROKER_URL = "redis://redis:6379/1"
 
 # Запускаем приложение
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
