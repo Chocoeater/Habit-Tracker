@@ -6,6 +6,7 @@ def validate_mutually_exclusive_fields(attrs, instance=None):
 
     linked_habit = attrs.get("linked_habit", None)
     reward = attrs.get("reward", None)
+    tag_pleasant_habit = attrs("tag_pleasant_habit", None)
 
     if instance:
         if linked_habit is None:
@@ -15,7 +16,7 @@ def validate_mutually_exclusive_fields(attrs, instance=None):
 
     if linked_habit and reward:
         raise ValidationError("Укажите либо вознаграждение, либо вознаграждающую привычку.")
-    if not linked_habit and not reward:
+    if not linked_habit and not reward and not tag_pleasant_habit:
         raise ValidationError(
             "Должно быть указано либо вознаграждение (поле reward), либо вознаграждающая привычка (linked_habit)."
         )
