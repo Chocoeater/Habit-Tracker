@@ -6,7 +6,7 @@ def validate_mutually_exclusive_fields(attrs, instance=None):
 
     linked_habit = attrs.get("linked_habit", None)
     reward = attrs.get("reward", None)
-    tag_pleasant_habit = attrs("tag_pleasant_habit", None)
+    tag_pleasant_habit = attrs.get("tag_pleasant_habit", None)
 
     if instance:
         if linked_habit is None:
