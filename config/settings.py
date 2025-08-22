@@ -14,7 +14,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from django.conf.global_settings import STATICFILES_DIRS, STATIC_ROOT
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -88,17 +87,25 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("NAME_BD"),
-        "HOST": os.getenv("HOST_BD"),
-        "USER": os.getenv("USER_BD"),
-        "PASSWORD": os.getenv("PASSWORD_BD"),
-        "PORT": os.getenv("PORT_BD"),
+# Для GitHub Actions используем SQLite
+if os.getenv('GITHUB_ACTIONS') == 'true':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.getenv("NAME_BD"),
+            "HOST": os.getenv("HOST_BD"),
+            "USER": os.getenv("USER_BD"),
+            "PASSWORD": os.getenv("PASSWORD_BD"),
+            "PORT": os.getenv("PORT_BD"),
+        }
+    }
 
 
 # Password validation

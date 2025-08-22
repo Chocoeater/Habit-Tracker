@@ -6,21 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -37,19 +22,10 @@ jobs:
           poetry config virtualenvs.create false
           poetry install --no-interaction --no-root
 
-      - name: Wait for PostgreSQL
-        run: |
-          sudo apt-get install -y postgresql-client
-          timeout 30s bash -c 'until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done; echo "PostgreSQL is ready"'
-
       - name: Run migrations
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          POSTGRES_DB: test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+          DATABASE_URL: sqlite:///db.sqlite3
           DEBUG: False
         run: |
           python manage.py migrate
@@ -57,11 +33,7 @@ jobs:
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          POSTGRES_DB: test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+          DATABASE_URL: sqlite:///db.sqlite3
           DEBUG: False
         run: |
           python manage.py test
