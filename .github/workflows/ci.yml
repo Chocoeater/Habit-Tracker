@@ -71,7 +71,7 @@ jobs:
             cd /Habit-Tracker
   
             
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            sed -i \"s|image: chocoeater/myapp:latest|image: chocoeater/myapp:${{ github.sha }}|\" docker-compose.yml
   
             
             docker-compose down web celery_worker celery_beat
