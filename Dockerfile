@@ -9,7 +9,6 @@ RUN apt-get update \
 
 # Устанавливаем poetry
 RUN pip install poetry
-RUN pip install gunicorn
 
 # Копируем файлы зависимостей
 COPY pyproject.toml poetry.lock ./
@@ -20,8 +19,6 @@ RUN poetry install --no-interaction --no-root
 
 # Копируем весь проект
 COPY . .
-
-RUN mkdir -p /app/static
 
 ENV CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 ENV CELERY_BROKER_URL = "redis://redis:6379/1"
