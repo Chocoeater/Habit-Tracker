@@ -8,7 +8,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем poetry
-RUN pip install poetry gunicorn
+RUN pip install poetry
+RUN pip install gunicorn
 
 # Копируем файлы зависимостей
 COPY pyproject.toml poetry.lock ./
