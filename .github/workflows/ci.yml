@@ -37,6 +37,9 @@ jobs:
           DEBUG: False
         run: |
           python manage.py test
+      - name: Run linters
+        run: |
+          flake8
 
   build:
     runs-on: ubuntu-latest

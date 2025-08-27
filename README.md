@@ -106,4 +106,105 @@ docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py create_admin
 ```
 
+# CI/CD
 
+Перейдите в Settings → Secrets and variables → Actions и добавьте:
+
+Secrets:
+
+DOCKERHUB_USERNAME - ваш Docker Hub логин
+
+DOCKERHUB_ACCESS_TOKEN - Docker Hub Personal Access Token
+
+SSH_PRIVATE_KEY - приватный SSH ключ для сервера
+
+SERVER_IP - IP адрес сервера
+
+SSH_USERNAME - пользователь для SSH (обычно root или ubuntu)
+
+### Пример файла для тестирования и деплоя на сервер через workflow:
+```yml
+name: Django CI
+
+on: [ push, pull_request ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-root
+
+      - name: Run migrations
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: sqlite:///db.sqlite3
+          DEBUG: False
+        run: |
+          python manage.py migrate
+
+      - name: Run tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: sqlite:///db.sqlite3
+          DEBUG: False
+        run: |
+          python manage.py test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
+            cd Habit-Tracker
+  
+            
+            sed -i \"s|image: chocoeater/myapp:latest|image: chocoeater/myapp:${{ github.sha }}|\" docker-compose.yml
+  
+            
+            docker-compose down 
+            docker-compose up -d 
+  
+           
+            docker-compose ps
+            echo "Deployment completed!"
+          "
+```
