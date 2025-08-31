@@ -171,7 +171,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 # Настройки для Celery
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = "redis://redis/0"
+CELERY_BROKER_URL = "redis://redis:6379/0"
 
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"

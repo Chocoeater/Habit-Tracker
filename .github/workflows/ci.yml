@@ -37,6 +37,9 @@ jobs:
           DEBUG: False
         run: |
           python manage.py test
+      - name: Run linters
+        run: |
+          flake8
 
   build:
     runs-on: ubuntu-latest
@@ -65,11 +68,19 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Deploy to Server
+      - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
+            cd Habit-Tracker
+  
+            
+            sed -i \"s|image: chocoeater/myapp:latest|image: chocoeater/myapp:${{ github.sha }}|\" docker-compose.yml
+  
+            
+            docker-compose down 
+            docker-compose up -d 
+  
+           
+            docker-compose ps
+            echo "Deployment completed!"
+          "
